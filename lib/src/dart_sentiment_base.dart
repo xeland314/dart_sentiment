@@ -1,12 +1,14 @@
 import 'package:remove_emoji/remove_emoji.dart';
 import 'lang/emoji/emoji.dart';
+import 'lang/emoticon/emoticon.dart';
 import 'lang/english/english.dart';
 import 'lang/french/french.dart';
 import 'lang/german/german.dart';
 import 'lang/italian/italian.dart';
+import 'lang/spanish/spanish.dart';
 
 /// Language code
-enum LanguageCode { english, italian, french, german }
+enum LanguageCode { english, italian, french, german, spanish }
 
 /// Sentiment class
 class Sentiment {
@@ -65,22 +67,22 @@ class Sentiment {
       {bool emoji = false, LanguageCode languageCode = LanguageCode.english}) {
     try {
       if (text.isEmpty) throw ('err');
-      Map<dynamic, int> sentiments = {};
+      Map<dynamic, num> sentiments = {};
       if (emoji) sentiments.addAll(emojis);
+      if (emoji) sentiments.addAll(emoticon);
 
       switch (languageCode) {
-
         /// english
         case LanguageCode.english:
           sentiments.addAll(en);
           break;
 
-      /// italian
+        /// italian
         case LanguageCode.italian:
           sentiments.addAll(it);
           break;
 
-      /// french
+        /// french
         case LanguageCode.french:
           sentiments.addAll(fr);
           break;
@@ -89,11 +91,17 @@ class Sentiment {
         case LanguageCode.german:
           sentiments.addAll(de);
           break;
+
+        /// spanish
+        case LanguageCode.spanish:
+          sentiments.addAll(es);
+          break;
+
         default:
           throw ('err');
       }
 
-      var score = 0;
+      var score = 0.0;
       var goodwords = [], badwords = [];
       var wordlist = filterText(text, emoji);
       for (var i = 0; i < wordlist.length; i++) {
